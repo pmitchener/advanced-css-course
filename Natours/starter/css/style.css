@@ -6,3 +6,210 @@ Medium green: #55c57a
 Dark green: #28b485
 
 */
+/*================= Basic Reset =========================*/
+/* Universal selector. select every element on the page and then apply these declarations.*/
+/* Kill all the default margins and padding that browsers add to the elements. i.e h1 tag */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* do not add the padding to the total width and total height of the elements.*/
+}
+body {
+  font-family: "Lato", sans-serif; /*better to do here than in universal, because all fonts are inherited from the parent.*/
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7; /*1.7 times bigger than the pre-defined line height */
+  color: #777;
+  padding: 30px;
+}
+/*=================End of basic reset ============================*/
+
+.header {
+  height: 95vh; /*height should always be 95% of view port height*/
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(126, 213, 111, 0.8),
+      rgba(40, 180, 133, 0.8)
+    ),
+    url(../img/hero.jpg);
+  background-size: cover; /*what ever width of the element or viewport, it will always try to fit element inside of the box.*/
+  background-position: top;
+  position: relative;
+
+  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+}
+
+.logo-box {
+  position: absolute;
+  top: 40px; /* top and left are referencing the parent element which has relative position. parent = header class */
+  left: 40px;
+}
+
+.logo {
+  height: 35px; /* width will scaled automatically by browser.*/
+}
+/*.logo:hover {
+  animation: moveInRight 1s ease-out;
+}*/
+.text-box {
+  position: absolute;
+  top: 40%; /* top and left here are in relation to the parent element. */
+  left: 50%;
+  transform: translate(
+    -50%,
+    -50%
+  ); /*above top, left will start left of element and top of element in center. this transform will shift the actual element */
+  text-align: center;
+}
+.heading-primary {
+  color: #fff;
+  text-transform: uppercase;
+  backface-visibility: hidden; /* keep this element from jumping up after animation finishes.*/
+  margin-bottom: 60px;
+}
+
+.heading-primary-main {
+  display: block; /*block elements create line breaks after and before them??? */
+  font-size: 60px;
+  font-weight: 400;
+  letter-spacing: 35px;
+
+  animation: moveInLeft;
+  animation-duration: 1s;
+  animation-timing-function: ease-out; /*function that defines how the animation will proceed*/
+  /*
+  animation-delay: 3s;
+  animation-iteration-count: 3;
+  */
+}
+
+.heading-primary-sub {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 17.4px;
+  animation: moveInRight 1s ease-out; /*short hand version of above */
+}
+
+/* animation for primary headers */
+/* for browser performance, it is best to only animate 2 different (opacity and transform) properties.*/
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  80% {
+    transform: translateX(
+      10px
+    ); /*positive number here means it will go to the right side??? */
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+
+  80% {
+    transform: translateX(
+      -10px
+    ); /*negative number here means it will go to the left side??? */
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+/* link is a pseudo class. we use pseudo classes to style emelemts under special conditions*/
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 15px 40px;
+  /*The box model will work on this element ahs if it was a block element.
+    always do this if we want to give some paddings or some height or width to elements.
+    inline block elements are treated as if it was text. so to center just set 
+    text-align:center on the .text-box class.
+  */
+  display: inline-block;
+  border-radius: 100px; /*you can use a realy high number here. higher number won't change the shape*/
+  /*transition here means the transform on the :hover and :active will be animated in relation to their 
+    initial state the transition has to be on initial state. that is just how it works.
+  */
+  transition: all 0.2s; /*animate all the properies*/
+  position: relative;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+.btn:active {
+  transform: translateY(1px); /*always in response to the initial link state.*/
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.btn-white {
+  background-color: #fff;
+  color: #777;
+}
+/*pseudo element :after adds the effect right after the element we,re selecting
+  The trick here is to add an element that looks exactly like the buttom that we already have
+  but we put it behind the button. when we hover out of the button, then this hiden pseudo element 
+  basically goes back behind the button
+*/
+.btn::after {
+  content: ""; /*in order for it to appear we have to specify it's content property. does not matter what is there.*/
+  display: inline-block; /*also have to specify the display property. use inline-block because button is also an inlint-block*/
+  /*we need it to be exactly the same. so height and width at 100% 
+    this works becaue the ::after pseudo element is basically treted as a child of the button element
+  */
+  height: 100%;
+  width: 100%;
+  border-radius: 100px; /* also the same as button element*/
+  /*remember that this absolute positioning need to have a reference and the reference
+    is the first element with relative positioning that it can find. in this case this is the header.
+    but we want the reference to be the button. therefore, set .btn class to relative positioning.
+  */
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1; /*-1 set this behing the button. z-index defines the position of the elements if they are one on top of another.*/
+  /*remember that transition must be on initial state.*/
+  transition: all 0.4s;
+}
+
+.btn-white::after {
+  background-color: #fff;
+}
+/*create an ::after pseudo element for only when we have the button on the hover state.*/
+.btn:hover::after {
+  transform: scalex(1.4) scaleY(1.6); /*increase the size of of the emlement. 2 is double.*/
+  opacity: 0; /*trick fof fading something out*/
+}
+.btn-animated {
+  animation: moveInBottom 0.5s ease-out 0.75s;
+  /* use animation fill mode to get rid of the fact that you see the button before the animation starts
+    set to backwards, this will automatically apply the style of the moveInBotton 0% styles before the 
+    animation starts.
+  */
+  animation-fill-mode: backwards;
+}
